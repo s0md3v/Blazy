@@ -1,6 +1,6 @@
 # Blazy
 Blazy is a modern login page bruteforcer.
-<img src='https://i.imgur.com/Jhwa58j.png' />
+<p><img src='https://i.imgur.com/Jhwa58j.png' /></pe>
 ### Features
 - [x] Easy target selections
 - [x] Smart form and error detection
