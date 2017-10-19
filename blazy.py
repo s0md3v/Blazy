@@ -40,8 +40,11 @@ elif 'https://' in url:
     url = url.replace('https://', 'http://')
 else:
     url = 'http://' + url
-
-br.open(url) #Opens the url
+try:
+    br.open(url) #Opens the url
+except urllib2.URLError as e:
+    url = 'https://' + url
+    br.open(url)
 forms = br.forms() #Finds all the forms present in webpage
 
 headers = str(urlopen(url).headers.headers).lower() #Fetches headers of webpage
@@ -140,8 +143,8 @@ def find(): #Function for finding forms
             pass
     print '\033[1;31m[-]\033[0m No forms found'
 def brute(username, passwd, menu, option, name, form_number):
-    progress = 1
     for uname in usernames:
+        progress = 1
         print '\033[1;97m[>]\033[1;m Bruteforcing username: %s'% uname
         for password in passwords:
             sys.stdout.write('\r\033[1;97m[>]\033[1;m Passwords tried: %i / %i'% (progress, len(passwords)))
@@ -183,6 +186,7 @@ def brute(username, passwd, menu, option, name, form_number):
                     else:
                         pass
             progress = progress + 1
+        print ''
     print '\033[1;31m[-]\033[0m Failed to crack login credentials'
     quit()
 find()
