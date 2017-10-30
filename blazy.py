@@ -47,7 +47,7 @@ print("""\033[1;37m    ____   _
                            __/ |
     Made with \033[91m<3\033[37m By D3V\033[1;37m   |___/
     \033[0m""")
-url = eval(input('\033[1;34m[?]\033[0m Enter target URL: ')) #takes input from user
+url = raw_input('\033[1;34m[?]\033[0m Enter target URL: ') #takes input from user
 if 'http://' in url:
     pass
 elif 'https://' in url:
