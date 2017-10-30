@@ -62,7 +62,7 @@ if i_title != None:
     original = i_title.contents #value of title tag is assigned to 'original'
 
 def WAF_detector(): #WAF detection function
-    noise = "<script>alert()</script>" #a payload which is noisy enough to provoke the WAF
+    noise = "?=<script>alert()</script>" #a payload which is noisy enough to provoke the WAF
     fuzz = url + noise
     res1 = urlopen(fuzz) #Opens the noise injected payload
     if res1.code == 406 or res1.code == 501: #if the http response code is 406/501
