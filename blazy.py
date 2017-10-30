@@ -2,13 +2,17 @@
 #Modules
 from __future__ import print_function
 
-import http.cookiejar
 import sys
 from re import search
 
 from bs4 import BeautifulSoup
 
 import mechanize
+
+try:                 # Python 3
+    from http.cookiejar import LWPCookieJar
+except ImportError:  # Python 2
+    from cookielib import LWPCookieJar
 
 try:                 # Python 3
     from urllib.error import URLError
@@ -24,8 +28,7 @@ except NameError:
 #Stuff related to Mechanize browser module
 br = mechanize.Browser() #Shortening the call by assigning it to a varaible "br"
 # set cookies
-cookies = http.cookiejar.LWPCookieJar()
-br.set_cookiejar(cookies)
+br.set_cookiejar(LWPCookieJar())
 # Mechanize settings
 br.set_handle_equiv(True)
 br.set_handle_redirect(True)
