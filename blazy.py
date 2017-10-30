@@ -1,14 +1,20 @@
 #!/usr/bin/env python2
 #Modules
 from __future__ import print_function
+
 import http.cookiejar
 import sys
 from re import search
-from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
 import mechanize
+
+try:                 # Python 3
+    from urllib.error import URLError
+    from urllib.request import urlopen
+except ImportError:  # Python 2
+    from urllib2 import URLError, urlopen
 
 try:
     raw_input          # Python 2
@@ -50,7 +56,7 @@ else:
     url = 'http://' + url
 try:
     br.open(url) #Opens the url
-except urllib.error.URLError as e:
+except URLError:
     url = 'https://' + url
     br.open(url)
 forms = br.forms() #Finds all the forms present in webpage
