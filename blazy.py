@@ -42,7 +42,7 @@ elif 'https://' in url:
 else:
     url = 'http://' + url
 try:
-    br.open(url) #Opens the url
+    br.open(url, timeout=10.0)) #Opens the url
 except URLError as e:
     url = 'https://' + url
     br.open(url)
