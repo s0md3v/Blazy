@@ -129,12 +129,20 @@ def find(): #Function for finding forms
                         brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
                     else:
                         menu = "False" #No menu is present in the form
-                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        try:
+                            brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        except Exception as e:
+                            cannotUseBruteForce(username, e)
+                            pass							
                 else:
                     menu = "False" #No menu is present in the form
                     option = "" #Sets option to null
                     name = "" #Sets name to null
-                    brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                    try:
+                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                    except Exception as e:
+                       cannotUseBruteForce(username, e)
+                       pass
             else:
                 form_number = form_number + 1
                 pass
@@ -142,6 +150,9 @@ def find(): #Function for finding forms
             form_number = form_number + 1
             pass
     print '\033[1;31m[-]\033[0m No forms found'
+def cannotUseBruteForce(username, e):
+    print '\r\033[1;31m[!]\033[0m Cannot use brute force with user %s.' % username
+    print '\r    [Error: %s]' % e.message	
 def brute(username, passwd, menu, option, name, form_number):
     for uname in usernames:
         progress = 1
