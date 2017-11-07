@@ -7,6 +7,7 @@ import sys
 from bs4 import BeautifulSoup
 from re import search, findall
 from urllib import urlopen
+from urllib2 import URLError
 #Stuff related to Mechanize browser module
 br = mechanize.Browser() #Shortening the call by assigning it to a varaible "br"
 # set cookies
@@ -41,8 +42,8 @@ elif 'https://' in url:
 else:
     url = 'http://' + url
 try:
-    br.open(url) #Opens the url
-except urllib2.URLError as e:
+    br.open(url, timeout=10.0)) #Opens the url
+except URLError as e:
     url = 'https://' + url
     br.open(url)
 forms = br.forms() #Finds all the forms present in webpage
