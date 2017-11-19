@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from re import search, findall
 from urllib import urlopen
 from urllib2 import URLError
+from concurrent.futures import ThreadPoolExecutor
 #Stuff related to Mechanize browser module
 br = mechanize.Browser() #Shortening the call by assigning it to a varaible "br"
 # set cookies
@@ -127,11 +128,15 @@ def find(): #Function for finding forms
                         print '\033[1;33m[!]\033[0m Menu name: ' + name #prints menu name
                         print '\033[1;33m[!]\033[0m Options available: ' + options #prints available options
                         option = raw_input('\033[1;34m[?]\033[0m Please Select an option:>> ') #Gets option from user
-                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        with ThreadPoolExecutor() as executor:
+                            # Calls the bruteforce function
+                            executor.submit(brute, username, passwd, menu, option, name, form_number)
                     else:
                         menu = "False" #No menu is present in the form
                         try:
-                            brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                            with ThreadPoolExecutor() as executor:
+                                # Calls the bruteforce function
+                                executor.submit(brute, username, passwd, menu, option, name, form_number)
                         except Exception as e:
                             cannotUseBruteForce(username, e)
                             pass							
@@ -140,7 +145,9 @@ def find(): #Function for finding forms
                     option = "" #Sets option to null
                     name = "" #Sets name to null
                     try:
-                        brute(username, passwd, menu, option, name, form_number) #Calls the bruteforce function
+                        with ThreadPoolExecutor() as executor:
+                            # Calls the bruteforce function
+                            executor.submit(brute, username, passwd, menu, option, name, form_number)
                     except Exception as e:
                        cannotUseBruteForce(username, e)
                        pass

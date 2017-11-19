@@ -1,3 +1,4 @@
 mechanize
 bs4
 lxml
+futures
