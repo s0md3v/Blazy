@@ -133,6 +133,7 @@ def find(): #Function for finding forms
                             executor.submit(brute, username, passwd, menu, option, name, form_number)
                     else:
                         menu = "False" #No menu is present in the form
+                        option = ""  # Sets option to null
                         try:
                             with ThreadPoolExecutor() as executor:
                                 # Calls the bruteforce function
