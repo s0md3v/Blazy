@@ -103,6 +103,9 @@ wordlist_p(passwords)
 print '\033[1;97m[>]\033[1;m Passwords loaded: %i'% + len(passwords)
 def find(): #Function for finding forms
     form_number = 0
+    if len(forms)<1:
+        print '\033[1;31m[-]\033[0m No forms found'
+        quit()
     for f in forms: #Finds all the forms in the webpage
         data = str(f) #Converts the response recieved to string
         username = search(r'<TextControl\([^<]*=\)>', data) #Searches for fields that accept plain text
@@ -158,7 +161,6 @@ def find(): #Function for finding forms
         else:
             form_number = form_number + 1
             pass
-    print '\033[1;31m[-]\033[0m No forms found'
 def cannotUseBruteForce(username, e):
     print '\r\033[1;31m[!]\033[0m Cannot use brute force with user %s.' % username
     print '\r    [Error: %s]' % e.message	
