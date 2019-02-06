@@ -1,4 +1,10 @@
 # Blazy
+
+[![Build Status](https://img.shields.io/github/forks/s0md3v/Blazy.svg)](https://github.com/s0md3v/Blazy)
+[![Build Status](https://img.shields.io/github/stars/s0md3v/Blazy.svg)](https://github.com/s0md3v/Blazy)
+[![License](https://img.shields.io/github/license/s0md3v/Blazy.svg)](https://github.com/s0md3v/Blazy)
+[![Rawsec's CyberSecurity Inventory](https://inventory.rawsec.ml/img/badges/Rawsec-inventoried-FF5050_flat.svg)](https://inventory.rawsec.ml/tools.html#Blazy)
+
 Blazy is a modern login page bruteforcer.
 <p><img src='https://i.imgur.com/Jhwa58j.png' /></p>
 
